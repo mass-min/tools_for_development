@@ -1,0 +1,28 @@
+# .bash_profile
+
+# Get the aliases and functions
+if [ -f ~/.bashrc ]; then
+  . ~/.bashrc
+fi
+
+source $HOME/.git-completion.bash
+
+# User specific environment and startup programs
+
+alias vi='vim'
+alias git='hub'
+alias gcm='git cm'
+alias gpull='git pull'
+alias gadd='git add'
+alias gst='git st'
+alias gpush='git push'
+alias pr='pull-request'
+alias berake='bundle exec rake'
+alias bers='bundle exec rails s -b 0.0.0.0'
+export PATH="$HOME/.rbenv/bin:$PATH"
+eval "$(rbenv init -)"
+export GOROOT=/usr/lib/golang
+export GOPATH=/usr/share/gocode
+export PATH=/home/vagrant/.rbenv/shims:/home/vagrant/.rbenv/bin:/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin:/bin:/bin
+export PATH=/home/vagrant/.rbenv/shims:/home/vagrant/.rbenv/bin:/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin:/bin:/bin:/usr/local/go/bin:/
+export PATH="$HOME/.nodebrew/current/bin:$PATH"
