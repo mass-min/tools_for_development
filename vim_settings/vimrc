@@ -1,0 +1,188 @@
+"-----------------------------
+" base setting
+"-----------------------------
+"
+colorscheme molokai
+set t_Co=256
+set background=dark
+set nocompatible
+set whichwrap=b,s,h,l,<,>,[,],~
+if &t_Co > 2 || has("gui_running")
+  syntax on
+  set hlsearch
+endif
+
+"-----------------------------
+" display
+"-----------------------------
+set title
+set titlestring=haru
+set display=uhex
+set number
+set ruler
+set list
+set listchars=tab:▸\ ,extends:❯,precedes:❮
+set shortmess+=I
+set showcmd
+set cmdheight=2
+set scrolloff=2
+set laststatus=2
+highlight StatusLine term=bold cterm=bold ctermfg=black ctermbg=white
+
+set matchtime=1
+highlight Comment ctermfg=Cyan
+set wildmenu
+set textwidth=0
+set wrap
+set encoding=utf8
+set fileencodings=utf-8,euc-jp,iso-2022-jp,utf-8,cp932
+set gdefault
+
+" 検索
+set incsearch
+set ignorecase
+set smartcase
+set wrapscan
+
+" tab関連
+set expandtab
+set tabstop=2
+set shiftwidth=2
+set background=dark
+let g:indent_guides_auto_colors = 0
+let g:indent_guides_enable_on_vim_startup = 1
+hi IndentGuidesOdd  ctermbg=darkgray
+hi IndentGuidesEven ctermbg=black
+
+if &encoding == 'utf-8'
+  set ambiwidth=double
+  highlight ZenkakuSpace cterm=underline ctermfg=lightblue guibg=darkgray
+  match ZenkakuSpace /　/
+endif
+set cursorline
+augroup cch
+  autocmd! cch
+  autocmd WinLeave * set nocursorline
+  autocmd WinEnter,BufRead * set cursorline
+augroup END
+
+" 対応する括弧を表示, '%'で移動
+set showmatch
+source $VIMRUNTIME/macros/matchit.vim
+let b:match_words = "(:),{:},[:]"
+
+" dein
+" Vim起動完了時にインストール
+augroup PluginInstall
+  autocmd!
+  autocmd VimEnter * if dein#check_install() | call dein#install() | endif
+augroup END
+
+" 各プラグインをインストールするディレクトリ
+let s:plugin_dir = expand('~/.vim/')
+
+" dein.vimをインストールするディレクトリをランタイムパスへ追加
+let s:dein_dir = s:plugin_dir . 'repos/github.com/Shougo/dein.vim'
+execute 'set runtimepath+=' . s:dein_dir
+
+" dein.vimがまだ入ってなければ 最初に git clone
+if !isdirectory(s:dein_dir)
+  call mkdir(s:dein_dir, 'p')
+  silent execute printf('!git clone %s %s', 'https://github.com/Shougo/dein.vim', s:dein_dir)
+endif
+
+"dein plugin settings                                                                                                                                                                
+if dein#load_state(s:plugin_dir)
+  call dein#begin(s:plugin_dir)
+endif
+
+" ここからインストールするプラグイン
+call dein#add('Shougo/dein.vim')
+call dein#add('Shougo/neocomplcache.vim')
+call dein#add('Shougo/neocomplcache-rsense.vim')
+
+" neocomplcacheの設定
+" Disable AutoComplPop.
+let g:acp_enableAtStartup = 0
+
+" Use neocomplcache.
+let g:neocomplcache_enable_at_startup = 1
+
+" Use smartcase.
+let g:neocomplcache_enable_smart_case = 1
+
+" Set minimum syntax keyword length.
+let g:neocomplcache_min_syntax_length = 3
+let g:neocomplcache_lock_buffer_name_pattern = '\*ku\*'
+
+let g:neocomplcache_enable_camel_case_completion = 1
+let g:neocomplcache_enable_underbar_completion = 1
+
+
+" Rsense用の設定
+if !exists('g:neocomplcache_omni_patterns')
+    let g:neocomplcache_omni_patterns = {}
+endif
+let g:neocomplcache_omni_patterns.ruby = '[^. *\t]\.\w*\|\h\w*::'
+autocmd FileType ruby setlocal omnifunc=rubycomplete#Complete
+
+autocmd BufNewFile,BufRead *.{html,htm,vue*} set filetype=html
+
+"rsenseのインストールフォルダがデフォルトと異なるので設定
+let g:rsenseHome = expand("~/.rbenv/shims/rsense")
+let g:rsenseUseOmniFunc = 1
+
+"-------------------------------
+"NeoBundle
+"-------------------------------
+filetype off
+
+if has('vim_starting')
+  set runtimepath+=~/.vim/bundle/neobundle.vim/
+  " NeoBundleが未インストールであればgit cloneする                                                                                                                                   
+  if !isdirectory(expand("~/.vim/bundle/neobundle.vim/"))
+    echo "install NeoBundle..."
+    :call system("git clone git://github.com/Shougo/neobundle.vim ~/.vim/bundle/neobundle.vim")
+  endif
+endif
+
+call neobundle#begin(expand('~/.vim/bundle'))
+
+" NeoBundle自身の管理
+NeoBundleFetch 'Shougo/neobundle.vim'
+
+" ツリー表示
+NeoBundle 'scrooloose/nerdtree'
+nnoremap <silent><C-e> :NERDTreeToggle<CR>
+
+" 末尾の全角と半角の空白文字を赤くハイライト
+NeoBundle 'bronson/vim-trailing-whitespace'
+" インデント表示
+NeoBundle 'nathanaelkane/vim-indent-guides'
+" ステータスラインの表示内容強化
+NeoBundle 'itchyny/lightline.vim'
+" ドキュメント参照
+NeoBundle 'thinca/vim-ref'
+NeoBundle 'yuku-t/vim-ref-ri'
+
+" メソッド定義元へのジャンプ
+NeoBundle 'szw/vim-tags'
+
+" コメントON/OFFを手軽に実行
+NeoBundle 'tomtom/tcomment_vim'
+
+" Ruby向けにendを自動挿入してくれる
+NeoBundle 'tpope/vim-endwise'
+
+" coffeescript向けシンタックスハイライト
+NeoBundle 'kchmck/vim-coffee-script'
+" Rails向けのコマンドを提供する
+NeoBundle 'tpope/vim-rails'
+NeoBundle 'vim-ruby/vim-ruby'
+
+call neobundle#end()
+
+filetype plugin indent on     " required!
+filetype indent on
+
+NeoBundleCheck 
