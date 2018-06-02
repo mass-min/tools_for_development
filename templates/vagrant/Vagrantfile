@@ -1,0 +1,30 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+# Vagrant
+Vagrant.configure("2") do |config|
+  config.vm.box = "centos/7"
+
+  config.hostmanager.enabled = true
+  config.hostmanager.manage_guest = true
+
+  config.vm.define :web do |web|
+    web.vm.network "private_network", ip: "192.168.33.10"
+
+    web.vm.network "forwarded_port", guest: 3000, host: 3000
+    web.vm.network "forwarded_port", guest: 3031, host: 3031
+    web.vm.network "forwarded_port", guest: 3035, host: 3035
+    web.vm.network "forwarded_port", guest: 5000, host: 5000
+    web.vm.network "forwarded_port", guest: 8000, host: 8000
+    web.vm.network "forwarded_port", guest: 8080, host: 8080
+
+    web.hostmanager.manage_host = true
+
+    web.vm.synced_folder ".", "/vagrant", type: "nfs"
+
+    web.vm.provider :virtualbox do |vb|
+      vb.name = "<name>"
+      vb.memory = 1024
+    end
+  end
+end
