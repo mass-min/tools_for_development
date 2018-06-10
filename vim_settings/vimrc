@@ -54,6 +54,8 @@ let g:indent_guides_enable_on_vim_startup = 1
 hi IndentGuidesOdd  ctermbg=darkgray
 hi IndentGuidesEven ctermbg=black
 
+set backspace=indent,eol,start
+
 if &encoding == 'utf-8'
   set ambiwidth=double
   highlight ZenkakuSpace cterm=underline ctermfg=lightblue guibg=darkgray
