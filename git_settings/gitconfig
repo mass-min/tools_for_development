@@ -1,8 +1,8 @@
 # This is Git's per-user configuration file.
 [user]
 # Please adapt and uncomment the following lines:
-  name = mass-min
-  email = koyod111@gmail.com
+  name = <account name>
+  email = <email>
 
 [alias]
   st = status
